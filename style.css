@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.7rem;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  line-height: 1.8;
+  padding: 3rem;
+}
+
+h1 {
+  font-size: 3.2rem;
+  font-weight: 600;
+  padding-bottom: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.grid {
+  width: 200px;
+  height: 400px;
+  background-color: #ddd;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid div {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+}
+

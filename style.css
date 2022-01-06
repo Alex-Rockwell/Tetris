@@ -41,7 +41,21 @@ h1 {
   background-color: #28197e;
 }
 
-/* .taken {
-  background-color: red;
-} */
+.minigrid {
+  margin-left: 50px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(202, 235, 235);
+}
+
+.minigrid div {
+  width: 20px;
+  height: 20px;
+}
+
+.container {
+  display: flex;
+}
 

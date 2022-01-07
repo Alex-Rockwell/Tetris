@@ -4,6 +4,7 @@ const squares = Array.from(document.querySelectorAll('.grid div'))
 const scoreDisplay = document.querySelector('#score')
 const startButton = document.querySelector('#start-button')
 const width = 10
+let nextRandom = 0
 
 const lShape = [
   [1, width + 1, width*2 + 1, 2],
@@ -82,10 +83,12 @@ function moveDown() {
 function freeze() {
   if (current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
     current.forEach(index => squares[currentPosition+index].classList.add('taken'))
-    random = Math.floor(Math.random()*shapes.length)
+    random = nextRandom
+    nextRandom = Math.floor(Math.random()*shapes.length)
     current = shapes[random][currentRotation]
     currentPosition = 4
     draw()
+    displayShape()
   }
 }
 
@@ -124,10 +127,21 @@ function rotate() {
 const displaySquares = document.querySelectorAll('.minigrid div')
 const displayWidth = 4
 let displayIndex = 0
+
 const nextShape = [
-  [1, width + 1, width*2 + 1, 2],
-  [width+1, width+2, width*2, width*2+1],
-  [1, width, width+1, width+2],
-  [0, 1, width, width+1],
-  [1, width+1, width*2+1, width*3+1],
+  [1, displayWidth + 1, displayWidth*2 + 1, 2],
+  [displayWidth+1, displayWidth+2, displayWidth*2, displayWidth*2+1],
+  [1, displayWidth, displayWidth+1, displayWidth+2],
+  [0, 1, displayWidth, displayWidth+1],
+  [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1],
 ]
+
+function displayShape() {
+  displaySquares.forEach(square => {
+    square.classList.remove('activeSquare')
+  })
+  nextShape[nextRandom].forEach(index => {
+    displaySquares[displayIndex + index].classList.add('activeSquare')
+  })
+}
+

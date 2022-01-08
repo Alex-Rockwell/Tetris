@@ -1,10 +1,19 @@
 
 const grid = document.querySelector('.grid')
-const squares = Array.from(document.querySelectorAll('.grid div'))
+let squares = Array.from(document.querySelectorAll('.grid div'))
 const scoreDisplay = document.querySelector('#score')
 const startButton = document.querySelector('#start-button')
 const width = 10
 let nextRandom = 0
+let timerId
+let score = 0
+const colors = [
+  'orange',
+  'red',
+  'purple',
+  'green',
+  'blue'
+]
 
 const lShape = [
   [1, width + 1, width*2 + 1, 2],
@@ -48,16 +57,17 @@ let current = shapes[random][currentRotation]
 function draw() {
   current.forEach(index => {
     squares[currentPosition + index].classList.add('activeSquare')
+    squares[currentPosition + index].style.backgroundColor = colors[random]  
   })
 }
 
 function undraw() {
   current.forEach(index => {
     squares[currentPosition + index].classList.remove('activeSquare')
+    squares[currentPosition + index].style.backgroundColor = ''  
   })
 }
 
-timerId = window.setInterval(moveDown, 500)
 
 function control(e) {
   if (e.keyCode === 37) {
@@ -66,7 +76,7 @@ function control(e) {
     rotate()
   } else if (e.keyCode === 39) {
     moveRight()
-  } else if (e.keyCode === 38) {
+  } else if (e.keyCode === 40) {
     moveDown()
   }
 }
@@ -89,6 +99,8 @@ function freeze() {
     currentPosition = 4
     draw()
     displayShape()
+    addScore()
+    gameOver()
   }
 }
 
@@ -126,7 +138,7 @@ function rotate() {
 
 const displaySquares = document.querySelectorAll('.minigrid div')
 const displayWidth = 4
-let displayIndex = 0
+const displayIndex = 0
 
 const nextShape = [
   [1, displayWidth + 1, displayWidth*2 + 1, 2],
@@ -139,9 +151,53 @@ const nextShape = [
 function displayShape() {
   displaySquares.forEach(square => {
     square.classList.remove('activeSquare')
+    square.style.backgroundColor = '' 
   })
   nextShape[nextRandom].forEach(index => {
     displaySquares[displayIndex + index].classList.add('activeSquare')
+    displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom] 
   })
 }
+
+startButton.addEventListener('click', () => {
+  scoreDisplay.textContent = score
+  if (timerId) {
+    clearInterval(timerId)
+    timerId = 0
+  } else {
+    draw()
+    timerId = setInterval(moveDown, 300)
+    nextRandom = Math.floor(Math.random()*shapes.length)
+    displayShape()
+  }
+})
+
+function addScore() {
+  for (let i=0; i < 199; i += width) {
+    const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9]
+
+    if (row.every(index => squares[index].classList.contains('taken'))) {
+      score += 10
+      scoreDisplay.textContent = score
+      row.forEach(index => {
+        squares[index].classList.remove('taken')
+        squares[index].classList.remove('activeSquare')
+        squares[index].style.backgroundColor = ''
+      })
+      let squaresRemoved = squares.splice(i, width)
+      squares = squaresRemoved.concat(squares)
+      squares.forEach(cell => grid.appendChild(cell))
+    }
+  }
+}
+
+function gameOver() {
+  if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    scoreDisplay.textContent = 'Game over'
+    clearInterval(timerId)
+  }
+}
+
+
+
 
